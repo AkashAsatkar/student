@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en">
+<head>
+<title>Bootstrap Example</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script
+src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+<h2>Student Enrollment Form</h2>
+<form id="stdForm" method="post">
+<div class="form-group">
+<label for="stdId">ROLL NO.:</label> <label id="stdid1">
+</label>
+<input type="text" class="form-control" name="stdId" id="stdId"
+placeholder="Enter Student rollno ">
+</div>
+<div class="form-group">
+<label for="stdName">STUDENT NAME:</label>
+<input type="text" class="form-control" id="stdName"
+placeholder="Enter Student Name" name="stdName">
+</div>
+<div class="form-group">
+<label for="stdcls">CLASS:</label>
+<input type="email" class="form-control" id="stdcls"
+placeholder="Enter Student Class" name="stdcls">
+</div>
+    <div class="form-group">
+<label for="stdadd">ADDRESS:</label>
+<input type="email" class="form-control" id="stdadd"
+placeholder="Enter Student Address" name="stdadd">
+</div>
+    <div class="form-group">
+<label for="stdDOB">DATE OF BIRTH:</label>
+<input type="email" class="form-control" id="stdDOB"
+placeholder="Enter Student DOB" name="stdDOB">
+</div>
+     <div class="form-group">
+<label for="stdenr">ENROLLMENT-DATE:</label>
+<input type="email" class="form-control" id="stdenr"
+placeholder="Enter Enrollment-Date" name="stdenr">
+</div>
+<input type="button" class="btn btn-primary" id="stdSave" value="Save"
+onclick="saveEmployee();">
+</form>
+</div>
+<script>
+// $("#StdId").focus();
+function validateAndGetFormData() {
+var stdIdVar = $("#stdId").val();
+//if (stdIdVar === "") 
+//alert("Student rollno Required Value");
+{
+$("#StdId").focus();
+return "";
+}
+var stdNameVar = $("#stdName").val();
+if (stdNameVar === "") {
+alert("Student Name is Required Value");
+$("#stdName").focus();
+return "";
+}
+var stdclsVar = $("#stdcls").val();
+if (stdclsVar === "") {
+alert("Student Class is Required Value");
+$("#stdcls").focus();
+return "";
+}
+var stdaddVar = $("#stdadd").val();
+if (stdaddVar === "") {
+alert("Student Address is Required Value");
+$("#stdadd").focus();
+return "";
+}
+var stddobVar = $("#stddob").val();
+if (stddobVar === "") {
+alert("Student DOB is Required Value");
+$("#stddob").focus();
+return "";
+}
+var stdenrVar = $("#stdenr").val();
+if (stdenrVar === "") {
+alert("Student Enrollment-date is Required Value");
+$("#stdenr").focus();
+return "";
+}
+var jsonStrObj = {
+stdId: stdIdVar,
+stdName: stdNameVar,
+stdcls: stdclsVar,
+stdadd: stdaddVar,
+stddob: stddobVar,
+stdenr: stdenrVar,
+
+};
+return JSON.stringify(jsonStrObj);
+}
+// This method is used to create PUT Json request.
+function createPUTRequest(connToken, jsonObj, dbName, relName) {
+var putRequest = "{\n"
++ "\"token\" : \""
++ connToken
++ "\","
++ "\"dbName\": \""
++ dbName
++ "\",\n" + "\"cmd\" : \"PUT\",\n"
++ "\"rel\" : \""
++ relName + "\","
++ "\"jsonStr\": \n"
++ jsonObj
++ "\n"
++ "}";
+return putRequest;
+}
+function executeCommand(reqString, dbBaseUrl, apiEndPointUrl) {
+var url = dbBaseUrl + apiEndPointUrl;
+var jsonObj;
+$.post(url, reqString, function (result) {
+jsonObj = JSON.parse(result);
+}).fail(function (result) {
+var dataJsonObj = result.responseText;
+jsonObj = JSON.parse(dataJsonObj);
+});
+return jsonObj;
+}
+function resetForm() {
+$("#stdId").val("");
+$("#stdName").val("");
+$("#stdcls").val("");
+$("#empadd").focus();
+$("#stddob").val("");
+$("#stdenr").val("");
+}
+function saveEmployee() {
+var jsonStr = validateAndGetFormData();
+if (jsonStr === "") {
+return;
+}
+var putReqStr = createPUTRequest("90938205|-31949272903300710|90954858",
+jsonStr, "STUDENT-TABLE", "SCHOOL-DB");
+alert(putReqStr);
+jQuery.ajaxSetup({async: false});
+var resultObj = executeCommand(putReqStr,
+"http://api.login2explore.com:5577","/api/iml");
+alert(JSON.stringify(resultObj));
+jQuery.ajaxSetup({async: true});
+resetForm();
+}
+</script>
+</body>
+</html>
+
+
